@@ -6,7 +6,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 class View(object):
     def __init__(self, root, funcs):
 
@@ -28,10 +27,7 @@ class View(object):
         aboutbutton = tk.Button(self.window, text="About", command=self.m_box).grid(row=1, column=4)
         quitbutton = tk.Button(self.window, text="Quit", command=self.window.destroy).grid(row=1, column=5)
 
-        # self.window.mainloop()
-
     def planet_limits(self, R):
-        #    return (500-(float(R)/2), 400-(float(R)/2), 500+(float(R)/2), 400+(float(R)/2))
         return (500 - (float(R)), 400 - (float(R)), 500 + (float(R)), 400 + (float(R)))
 
     def draw_canvas(self, state):
@@ -40,8 +36,6 @@ class View(object):
 
         position = state.position
         rad = int(float(planet_radius) / 75000)
-        # self.planet = self.canvas.create_oval(self.planet_limits(rad), fill="white")
-        # self.satellite = self.canvas.create_oval(self.planet_limits(5), fill="red")
 
         self.canvas.delete('all')
 
@@ -118,49 +112,6 @@ class SettingsWindow(object):
         # fill values into the widgets
         self.populate_settings_fields(current_settings)
 
-        # def apply():
-            # global currentradius
-            # #		currentradius = DoubleVar()
-            # currentradius = float(planetradius.get())
-            # global currentplanetmass
-            # #		currentplanetmass = DoubleVar()
-            # currentplanetmass = float(planetmass.get())
-            # #		currentplanetmass = currentplanetmass * math.pow(10, 20)
-            # global currentinitialpx
-            # #		currentinitialpx  = DoubleVar()
-            # currentinitialpx = float(initialpx.get())
-            # global currentinitialpy
-            # #		currentinitialpy = DoubleVar()
-            # currentinitialpy = float(initialpy.get())
-            # global currentinitialvx
-            # #		currentinitialvx = DoubleVar()
-            # currentinitialvx = float(initialvx.get())
-            # global currentinitialvy
-            # #		currentinitialvy = DoubleVar()
-            # currentinitialvy = float(initialvy.get())
-            # global currentapplemass
-            # #		currentapplemass = DoubleVar()
-            # currentapplemass = float(initialvy.get())
-            #
-            # if (math.fabs(
-            #         currentinitialpx * currentinitialpx + currentinitialpy * currentinitialpy) ** 0.5) < math.fabs(
-            #         currentradius):
-            #     tkMessageBox.showinfo(title="Error",
-            #                           message="The apple initial position cannot lie within the planet surface limits.")
-            # else:
-            #     global v0
-            #     v0 = (currentinitialvx, currentinitialvy)
-            #     global r0
-            #     r0 = (currentinitialpx, currentinitialpy)
-            #     global M
-            #     M = currentplanetmass
-            #     global Q
-            #     Q = currentradius
-            # #			global m
-            # #			m = currentapplemass
-
-            # reset()
-
         applybutton = tk.Button(smallie, text="Apply", command=self.apply_function).grid(row=99, column=4)
         closebutton = tk.Button(smallie, text="Close", command=smallie.destroy)
         closebutton.grid(row=100, column=4)
@@ -185,6 +136,3 @@ class SettingsWindow(object):
         settings['position'] = (settings['position_x'], settings['position_y'])
         settings['velocity'] = (settings['velocity_x'], settings['velocity_y'])
         return settings
-
-
-

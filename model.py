@@ -8,42 +8,7 @@ logger = logging.getLogger(__name__)
 # gravitational constant
 G = 6.67384 * math.pow(10, -11)
 
-# def runge_kutta_4(position_current, velocity_current, force_field, h):
-#     velocity_k1 = force_field(position_current)
-#     position_k1 = velocity_current
-#
-#     vk2 = force_field((position_current[0] + (position_k1[0] * h * 0.5), position_current[1] + (position_k1[1] * h * 0.5)))
-#
-#     rk2 = (velocity_current[0] + (velocity_k1[0] * h * 0.5), velocity_current[1] + (velocity_k1[1] * h * 0.5))
-#
-#     vk3 = force_field((position_current[0] + (rk2[0] * h * 0.5), position_current[1] + (rk2[1] * h * 0.5)))
-#
-#     rk3 = (velocity_current[0] + (vk2[0] * h * 0.5), velocity_current[1] + (vk2[1] * h * 0.5))
-#
-#     vk4 = force_field((position_current[0] + (rk3[0] * h), position_current[1] + (rk3[1] * h)))
-#
-#     rk4 = (velocity_current[0] + (vk3[0] * h), velocity_current[1] + (vk3[1] * h))
-#
-#     velocity_next = (velocity_current[0] + (velocity_k1[0] + vk2[0] * 2 + vk3[0] * 2 + vk4[0]) * (float(h) / 6),
-#              velocity_current[1] + (velocity_k1[1] + vk2[1] * 2 + vk3[1] * 2 + vk4[1]) * (float(h) / 6))
-#
-#     position_next = (position_current[0] + (position_k1[0] + rk2[0] * 2 + rk3[0] * 2 + rk4[0]) * (float(h) / 6),
-#              position_current[1] + (position_k1[1] + rk2[1] * 2 + rk3[1] * 2 + rk4[1]) * (float(h) / 6))
-#
-#     return position_next, velocity_next
-
-
 def runge_kutta_4(position_current, velocity_current, force_field, h):
-    # def k_2(k0, k1):
-    #     return k0[0] + (k1[0] * h * 0.5), k0[1] + (k1[1] * h * 0.5)
-    # def k_3(k0, k2):
-    #     return k0[0] + (k2[0] * h * 0.5), k0[1] + (k2[1] * h * 0.5)
-    # def k_4(k0, k3):
-    #     return k0[0] + (k3[0] * h), k0[1] + (k3[1] * h)
-    # def k_next(k0, k1, k2, k3, k4):
-    #     return k0[0] + (k1[0] + k2[0] * 2 + k3[0] * 2 + k4[0]) * (float(h) / 6), k0[0] + (
-    #                 k1[1] + k2[1] * 2 + k3[1] * 2 + k4[1]) * (float(h) / 6)
-
     acc_k1 = force_field(position_current)
     vel_k1 = velocity_current
 
@@ -68,18 +33,6 @@ def runge_kutta_4(position_current, velocity_current, force_field, h):
 
     return position_next, velocity_next
 
-# define vector field for gravity
-def gravity_force(position_x, position_y, planet_mass, satellite_mass):
-    if (position_x, position_y) == (0, 0):
-        return (0, 0)
-    else:
-        unitpx = math.cos(math.atan2(position_y, position_x))
-        unitpy = math.sin(math.atan2(position_y, position_x))
-        ModF = (-1 * G * planet_mass * satellite_mass) / (((position_x * position_x + position_y * position_y) ** 0.5) ** 2)
-        Fgravx = ModF * unitpx
-        Fgravy = ModF * unitpy
-        return Fgravx, Fgravy
-
 def gravity_field_function(planet_mass, satellite_mass):
     # def gravity_force(position_x, position_y):
     def gravity_force(position):
@@ -102,19 +55,13 @@ class Model(object):
         self.set_state(model_state)
 
     def step_time_forward(self, position_current, velocity_current):
-        # calculate satellite's next position and velocity,
-        # based on its current position, velocity and acceleration due to gravity
-        # position_current = self.satellite.get_position()
-        # velocity_current = self.satellite.get_velocity()
+        '''calculate satellite's next position and velocity,'''
         gravity_field = gravity_field_function(self.planet_mass, self.satellite_mass)
 
         position_next, velocity_next = runge_kutta_4(position_current,
                                                      velocity_current,
                                                      gravity_field,
                                                      self.time_step)
-
-        # self.position = position_next
-        # self.velocity = velocity_next
         return position_next, velocity_next
 
     # def collision(self):
