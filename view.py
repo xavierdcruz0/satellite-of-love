@@ -6,6 +6,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+#TODO move these constants somewhere cleaner/configurable
+CANVAS_SIZE = (1000, 700)
+SCALE_FACTOR = 75000
+# SCALE_FACTOR = 85000
+
 class View(object):
     def __init__(self, root, funcs):
 
@@ -16,7 +21,7 @@ class View(object):
 
         self.start, self.stop, self.reset, self.settings,self.settings_apply = funcs
 
-        self.canvas = tk.Canvas(self.window, height=700, width=1000, bg="black")
+        self.canvas = tk.Canvas(self.window, height=CANVAS_SIZE[1], width=CANVAS_SIZE[0], bg="black")
         self.canvas.create_text(200, 40, text="Hit the Reset button to begin get started.", fill="white")
         self.canvas.grid(row=0, column=0, columnspan=6)
 
@@ -27,24 +32,30 @@ class View(object):
         aboutbutton = tk.Button(self.window, text="About", command=self.m_box).grid(row=1, column=4)
         quitbutton = tk.Button(self.window, text="Quit", command=self.window.destroy).grid(row=1, column=5)
 
-    def planet_limits(self, R):
-        return (500 - (float(R)), 400 - (float(R)), 500 + (float(R)), 400 + (float(R)))
+    def circle_boundary(self, R):
+        '''
+        :param R: Planet radius (in pixels)
+        :return: (x0,y0,x1,y1)
+        Given a radius value in pixels, return the top-left and bottom-right coordinates of a box bounding a circle
+        with radius R pixels, centered in the canvas
+        '''
+        return (CANVAS_SIZE[0]/2 - (float(R)), CANVAS_SIZE[1]/2 - (float(R)), CANVAS_SIZE[0]/2 + (float(R)), CANVAS_SIZE[1]/2 + (float(R)))
 
     def draw_canvas(self, state):
         # logger.debug('Drawing canvas...')
         planet_radius = state.planet_radius
-
         position = state.position
-        rad = int(float(planet_radius) / 75000)
+
+        rad = int(float(planet_radius) / SCALE_FACTOR)
 
         self.canvas.delete('all')
 
-        planet = self.canvas.create_oval(self.planet_limits(rad), fill="white")
-        apple = self.canvas.create_oval(self.planet_limits(5), fill="red")
+        planet = self.canvas.create_oval(self.circle_boundary(rad), fill="white")
+        apple = self.canvas.create_oval(self.circle_boundary(5), fill="red")
 
-        r0_canvas = (position[0] / 75000 + 500, (position[1] * 1) / 75000 + 400)
+        r0_canvas = (position[0] / SCALE_FACTOR + CANVAS_SIZE[0]/2, (position[1] * 1) / SCALE_FACTOR + CANVAS_SIZE[1]/2)
         r0_canvas = (int(r0_canvas[0]), int(r0_canvas[1]))
-        self.canvas.move(apple, 500 - r0_canvas[0], 400 - r0_canvas[1])
+        self.canvas.move(apple, CANVAS_SIZE[0]/2 - r0_canvas[0], CANVAS_SIZE[1]/2 - r0_canvas[1])
 
         velocity = state.velocity
         vx, vy = velocity
