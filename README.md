@@ -6,7 +6,7 @@ A simple Tkinter app to display satellite motion around a planet with configurab
 * planet mass
 * initial conditions
 
-Using Runge-Kutta numerical integration method
+Using Runge-Kutta numerical integration method and MVC design pattern for the user interface
 
 ## TODO:
 
