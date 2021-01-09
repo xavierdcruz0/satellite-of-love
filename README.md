@@ -10,10 +10,10 @@ Using Runge-Kutta numerical integration method
 
 ## TODO:
 
-[] Remove hardcoded GUI geometry, make resizable
+- [ ] Remove hardcoded GUI geometry, make resizable
 
-[] Simplify RK4 implementation
+- [ ] Simplify RK4 implementation
 
-[] Implement RK4 in C++ library with SWIG
+- [ ] Implement RK4 in C++ library with SWIG
 
-[] Generalize to 3 dimensions
+- [ ] Generalize to 3 dimensions
